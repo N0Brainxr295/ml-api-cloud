@@ -6,10 +6,15 @@ application = Flask(__name__)
 # Load model
 model = joblib.load('sentiment_model.joblib')
 
+# ✅ Root route (VERY IMPORTANT for AWS health check)
+@application.route('/')
+def home():
+    return "API is running"
+
+# Prediction route
 @application.route('/predict', methods=['POST'])
 def predict():
     try:
-        # Force JSON parsing (fixes your issue)
         data = request.get_json(force=True)
 
         if not data:
